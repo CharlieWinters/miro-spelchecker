@@ -4,6 +4,7 @@ import com.miro.spelchecker.controller.JsoupHelper;
 import com.miro.spelchecker.dto.LanguageToolFactory;
 import com.miro.spelchecker.dto.SpelCheckRequestElement;
 import com.miro.spelchecker.dto.SpelCheckResponseElement;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class DefaultSpellCheckerService implements SpellCheckerService {
 
     private static final String[] charsToBeEncoded = new String[]{"&", "\""};
@@ -59,40 +61,41 @@ public class DefaultSpellCheckerService implements SpellCheckerService {
 
         matches.forEach(match ->
         {
-            int fromPosPlain = match.getFromPos();
-            int toPosPlain = match.getToPos();
+            try {
+                int fromPosPlain = match.getFromPos();
+                int toPosPlain = match.getToPos();
 
-            //Calculate how much index changes: find the textnode that this match is contained in.
-            //calculate the difference between its start index in the plaintext vs in the original html.
+                //Calculate how much index changes: find the textnode that this match is contained in.
+                //calculate the difference between its start index in the plaintext vs in the original html.
 
-            int startNodeKey;
-            var minTextIndex = indexMapping.keySet().stream().min(Comparator.naturalOrder());
-            if (minTextIndex.get() > match.getFromPos()) {
-                startNodeKey = minTextIndex.get();
-            } else {
-                startNodeKey = indexMapping.keySet().stream().filter(key -> key <= match.getFromPos()).max(Comparator.naturalOrder()).get();
+                int startNodeKey;
+                var minTextIndex = indexMapping.keySet().stream().min(Comparator.naturalOrder());
+                if (minTextIndex.get() > match.getFromPos()) {
+                    startNodeKey = minTextIndex.get();
+                } else {
+                    startNodeKey = indexMapping.keySet().stream().filter(key -> key <= match.getFromPos()).max(Comparator.naturalOrder()).get();
+                }
+                var startTextNode = indexMapping.get(startNodeKey);
+                int countOfEncodedCharactersBeforeMatchPosition = (int) countNumberOfOccurrences(plainText.substring(startNodeKey, Math.max(startNodeKey, match.getFromPos())), charsToBeEncoded);
+                int numberOfNewLine = (int) countNumberOfOccurrences(plainText.substring(startNodeKey, Math.max(startNodeKey, match.getFromPos())), new String[]{"\n"});
+                int fromPos = match.getFromPos() + getTextNodeStartPosition(startTextNode) - Math.min(startNodeKey, match.getFromPos()) + (countOfEncodedCharactersBeforeMatchPosition) * 4 + numberOfNewLine;
+
+                var endNodeKey = indexMapping.keySet().stream().filter(key -> key <= match.getToPos()).max(Comparator.naturalOrder()).get();
+                var remainingLengthInEndNode = match.getToPos() - endNodeKey;
+                var endTextNode = indexMapping.get(endNodeKey);
+                int countOfEncodedCharactersInTheLastTextNode = (int) countNumberOfOccurrences(endTextNode.text().substring(0, remainingLengthInEndNode), charsToBeEncoded);
+                int toPos = getTextNodeStartPosition(endTextNode) + countOfEncodedCharactersInTheLastTextNode * 4 + remainingLengthInEndNode;
+
+                responseMatches.add(new SpelCheckResponseElement(element.getElementId(), plainText, fromPosPlain, toPosPlain, fromPos, toPos, match.getMessage(), match.getSuggestedReplacements()));
+            } catch (Exception ex ) {
+                log.warn("SpellCheck error for element {}", element);
             }
-            var startTextNode = indexMapping.get(startNodeKey);
-            int countOfEncodedCharactersBeforeMatchPosition = (int) countNumberOfOccurrences(plainText.substring(startNodeKey, Math.max(startNodeKey,match.getFromPos())), charsToBeEncoded);
-            int numberOfNewLine = (int) countNumberOfOccurrences(plainText.substring(startNodeKey, Math.max(startNodeKey,match.getFromPos())), new String[] {"\n"});
-            int fromPos = match.getFromPos() + getTextNodeStartPosition(startTextNode) - Math.min(startNodeKey,match.getFromPos()) + (countOfEncodedCharactersBeforeMatchPosition) * 4 + numberOfNewLine;
-
-
-            var endNodeKey = indexMapping.keySet().stream().filter(key -> key <= match.getToPos()).max(Comparator.naturalOrder()).get();
-            var remainingLengthInEndNode = match.getToPos() - endNodeKey;
-            var endTextNode = indexMapping.get(endNodeKey);
-            int countOfEncodedCharactersInTheLastTextNode = (int) countNumberOfOccurrences(endTextNode.text().substring(0, remainingLengthInEndNode), charsToBeEncoded);
-            int toPos = getTextNodeStartPosition(endTextNode) + countOfEncodedCharactersInTheLastTextNode * 4 + remainingLengthInEndNode;
-
-            responseMatches.add(new SpelCheckResponseElement(element.getElementId(), plainText, fromPosPlain, toPosPlain, fromPos, toPos, match.getMessage(), match.getSuggestedReplacements()));
-
         });
         return responseMatches;
     }
 
     private static long countNumberOfOccurrences(String inputStr, String[] items) {
         return Arrays.stream(items).map(item -> StringUtils.countMatches(inputStr, item)).reduce(0, Integer::sum);
-
     }
 
     private int getTextNodeStartPosition(TextNode startTextNode) {
