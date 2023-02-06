@@ -16,7 +16,7 @@
     "validate": "yarn format && yarn typecheck && yarn lint"
   },
   "dependencies": {
-    "@tanstack/react-virtual": "^3.0.0-beta.23",
+    "@tanstack/react-virtual": "^3.0.0-beta.43",
     "classnames": "^2.3.2",
     "mirotone": "4.2.0",
     "react": "^18.2.0",
@@ -24,18 +24,18 @@
   },
   "devDependencies": {
     "@mirohq/websdk-types": "^2.7.0",
-    "@types/node": "^18.11.9",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.9",
-    "@typescript-eslint/eslint-plugin": "^5.44.0",
-    "@typescript-eslint/parser": "^5.44.0",
+    "@types/node": "^18.11.19",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.50.0",
     "@vitejs/plugin-react": "^2.2.0",
-    "eslint": "^8.28.0",
-    "eslint-plugin-react": "^7.31.11",
+    "eslint": "^8.33.0",
+    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.7.1",
-    "typescript": "4.8.4",
-    "vite": "3.2.3",
-    "vite-plugin-mkcert": "^1.10.1"
+    "prettier": "^2.8.3",
+    "typescript": "4.9.5",
+    "vite": "3.2.5",
+    "vite-plugin-mkcert": "^1.13.0"
   }
 }
