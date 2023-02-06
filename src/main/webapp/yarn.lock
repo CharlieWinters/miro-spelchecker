@@ -324,10 +324,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@mirohq/websdk-types@^2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@mirohq/websdk-types/-/websdk-types-2.3.1.tgz#27ec0d770222f589189a225ff59a154f3528da96"
-  integrity sha512-R+mwKXTJ4dOhAXsFEXx310hJ+8cMU4pcjmQhFb9C5TY20tOXYxgsNwRAurjnzhn0FqvJQg6XDB0Qhz+Ey/7mdw==
+"@mirohq/websdk-types@^2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@mirohq/websdk-types/-/websdk-types-2.7.0.tgz#c5ef47e6260cfb4d0ee2295e267b87fd8ecf062a"
+  integrity sha512-pVin7m2tjzyqPS9fENf/dpMyaAHu3bNHTKlc84lFFgZow96RXajpKFND9J0dUOap7awF0ZSRXugRywaZppYi4Q==
   dependencies:
     typescript "4.6.3"
 
