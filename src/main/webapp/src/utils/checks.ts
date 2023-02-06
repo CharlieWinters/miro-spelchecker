@@ -1,8 +1,21 @@
 import { SpellCheckResult } from "./api";
 import { AnchoredElementContent, WithAnchor } from "./extractors";
 
-export const getFullId = ({ elementId, property }: AnchoredElementContent) =>
-  `${elementId}:${property}`;
+const SEPARATORS = {
+  id: ":",
+  property: "|",
+};
+
+export const getFullId = ({
+  elementId,
+  property,
+}: AnchoredElementContent): string => [elementId, property].join(SEPARATORS.id);
+
+export const getListProperty = (...parts: (string | number)[]): string =>
+  parts.join(SEPARATORS.property);
+
+export const parseListProperty = (property: string): string[] =>
+  property.split(SEPARATORS.property);
 
 export type SpellCheckList = WithAnchor & {
   check: SpellCheckResult;

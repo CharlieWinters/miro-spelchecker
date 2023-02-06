@@ -2,6 +2,7 @@ import {
   AppCard,
   BoardNode,
   Card,
+  Connector,
   Frame,
   Image,
   Shape,
@@ -9,6 +10,7 @@ import {
   Tag,
   Text,
 } from "@mirohq/websdk-types";
+import { getListProperty } from "./checks";
 
 export interface ElementContent {
   elementId: string;
@@ -118,6 +120,20 @@ const getTagData = (
   ];
 };
 
+const getCaptionsData = (item: Connector): AnchoredElementContent[] => {
+  const captions = item.captions || [];
+  return captions
+    .map((caption, index) => {
+      return {
+        anchorId: item.id,
+        elementId: item.id,
+        text: caption.content || "",
+        property: getListProperty("captions", index, "content"),
+      };
+    })
+    .filter((element) => element.text);
+};
+
 // Exposed utility
 
 export const getContentFromItems = (items: BoardNode[]): ContentfulWithTags => {
@@ -150,6 +166,11 @@ export const getContentFromItems = (items: BoardNode[]): ContentfulWithTags => {
           return {
             elements: [...list.elements, ...getContentData(item)],
             tags: [...list.tags, ...getTagsData(item, list.tags)],
+          };
+        case "connector":
+          return {
+            elements: [...list.elements, ...getCaptionsData(item)],
+            tags: list.tags,
           };
         default:
           return list;

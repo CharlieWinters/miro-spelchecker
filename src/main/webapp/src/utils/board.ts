@@ -1,4 +1,44 @@
+import { BoardNode } from "@mirohq/websdk-types";
 import { SpellCheckResult } from "./api";
+import { parseListProperty } from "./checks";
+
+const getElementValue = (
+  element: BoardNode | string,
+  props: string[]
+): string => {
+  const prop = props.shift();
+  if (!prop) {
+    if (typeof element === "string") {
+      return element;
+    }
+    throw new Error(
+      "String value for the element not found. Perhaps wrong property route?"
+    );
+  }
+
+  // @ts-expect-error Properly typecheck the property
+  return getElementValue(element[prop], props);
+};
+
+const setElementValue = (
+  element: BoardNode,
+  props: string[],
+  value: string
+): void => {
+  const prop = props.shift();
+  if (!prop) {
+    throw new Error("Wrong property key, it is not defined");
+  }
+
+  if (!props.length) {
+    // @ts-expect-error Properly typecheck the property
+    element[prop] = value;
+    return;
+  }
+
+  // @ts-expect-error Properly typecheck the property
+  return setElementValue(element[prop], props, value);
+};
 
 export const applySuggestion = async (
   property: string,
@@ -13,14 +53,16 @@ export const applySuggestion = async (
     return;
   }
 
-  // @ts-expect-error Properly typecheck the property
-  element[property] = [
-    // @ts-expect-error Properly typecheck the property
-    element[property].slice(0, fromPos),
+  const props = parseListProperty(property);
+
+  const elementValue = getElementValue(element, [...props]);
+  const newValue = [
+    elementValue.slice(0, fromPos),
     suggestion,
-    // @ts-expect-error Properly typecheck the property
-    element[property].slice(toPos),
+    elementValue.slice(toPos),
   ].join("");
+
+  setElementValue(element, [...props], newValue);
 
   await element.sync();
   return element;
