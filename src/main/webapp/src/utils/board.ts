@@ -1,4 +1,8 @@
-import { BoardNode } from "@mirohq/websdk-types";
+import {
+  BoardNode,
+  CustomEvent,
+  SelectionUpdateEvent,
+} from "@mirohq/websdk-types";
 import { SpellCheckResult } from "./api";
 import { parseListProperty } from "./checks";
 
@@ -75,4 +79,33 @@ export const zoomToElement = async (elementId: string): Promise<void> => {
     throw new Error("Unsupported element for zooming");
   }
   await miro.board.viewport.zoomTo(element);
+};
+
+export const openPanel = (panelRootFile = "app.html"): Promise<void> =>
+  miro.board.ui.openPanel({ url: panelRootFile });
+
+export const subscribeIconClick = (fn: () => Promise<void>): VoidFunction => {
+  miro.board.ui.on("icon:click", fn);
+  return () => {
+    miro.board.ui.off("icon:click", fn);
+  };
+};
+
+export const subscribeSelectionUpdate = (
+  fn: (event: SelectionUpdateEvent) => void
+): VoidFunction => {
+  miro.board.ui.on("selection:update", fn);
+  return () => {
+    miro.board.ui.off("selection:update", fn);
+  };
+};
+
+export const subscribeCustomEvent = (
+  name: "check-selected",
+  fn: (event: CustomEvent) => Promise<void>
+): VoidFunction => {
+  miro.board.ui.on(`custom:${name}`, fn);
+  return () => {
+    miro.board.ui.off(`custom:${name}`, fn);
+  };
 };
