@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { BoardNode, SelectionUpdateEvent } from "@mirohq/websdk-types";
+import { BoardNode, Item } from "@mirohq/websdk-types";
+import { subscribeSelectionUpdate } from "../utils/board";
 
 export const useSelectedElements = () => {
   const [items, setItems] = useState<BoardNode[] | undefined>(undefined);
@@ -9,7 +10,8 @@ export const useSelectedElements = () => {
       .getSelection()
       .catch(() => {
         // TODO handle error
-        return [];
+        const fallbackItems: Item[] = [];
+        return fallbackItems;
       })
       .then((items) => {
         setItems(items);
@@ -21,13 +23,12 @@ export const useSelectedElements = () => {
   }, [refreshSelection]);
 
   useEffect(() => {
-    const onSelection = (event: SelectionUpdateEvent) => {
+    const unsubscribe = subscribeSelectionUpdate((event) => {
       setItems(event.items);
-    };
+    });
 
-    miro.board.ui.on("selection:update", onSelection);
     return () => {
-      miro.board.ui.off("selection:update", onSelection);
+      unsubscribe();
     };
   }, []);
 
