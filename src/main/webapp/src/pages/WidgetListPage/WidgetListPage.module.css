@@ -1,0 +1,29 @@
+.container {
+  height: 100vh;
+}
+
+.header {
+  padding: 0 var(--unit);
+}
+
+.list {
+  position: relative;
+  width: 100%;
+}
+
+.item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.scrollable {
+  overflow: auto;
+  padding: 0 16px;
+  flex: 1;
+}
+
+.padded {
+  margin-bottom: var(--unit);
+}

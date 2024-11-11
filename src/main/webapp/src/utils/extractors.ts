@@ -1,10 +1,11 @@
-import {
+import type {
   AppCard,
   BoardNode,
   Card,
   Connector,
   Frame,
   Image,
+  ItemType,
   Shape,
   StickyNote,
   Tag,
@@ -12,22 +13,23 @@ import {
 } from "@mirohq/websdk-types";
 import { getListProperty } from "./checks";
 
-export interface ElementContent {
+export type ElementContent = {
   elementId: string;
   text: string;
-}
+};
 
-export interface WithAnchor {
+export type WithAnchor = {
   anchorId: string;
+  type: ItemType;
   property: string; // TODO technically it is of type keyof BoardNode (anchor) that are strings
-}
+};
 
 export type AnchoredElementContent = ElementContent & WithAnchor;
 
-interface ContentfulWithTags {
+type ContentfulWithTags = {
   elements: AnchoredElementContent[];
   tags: AnchoredElementContent[];
-}
+};
 
 /**
  * Content extractors per Item type
@@ -43,6 +45,7 @@ const getTitleData = (
     {
       elementId: item.id,
       anchorId: item.id,
+      type: item.type,
       text: item.title,
       property: "title",
     },
@@ -58,6 +61,7 @@ const getDescriptionData = (item: Card | AppCard): AnchoredElementContent[] => {
     {
       elementId: item.id,
       anchorId: item.id,
+      type: item.type,
       text: item.description,
       property: "description",
     },
@@ -75,6 +79,7 @@ const getContentData = (
     {
       elementId: item.id,
       anchorId: item.id,
+      type: item.type,
       text: item.content,
       property: "content",
     },
@@ -92,6 +97,7 @@ const getTagsData = (
       const tag = {
         elementId: tagId,
         anchorId: item.id,
+        type: item.type,
         text: "",
         property: "title",
       };
@@ -102,18 +108,19 @@ const getTagsData = (
 
 const getTagData = (
   item: Tag,
-  meta: Record<string, string>
+  meta: Record<string, { anchorId: string; anchorType: ItemType }>
 ): AnchoredElementContent[] => {
-  const anchorId = meta[item.id];
+  const anchor = meta[item.id];
 
-  if (!item.title || !anchorId) {
+  if (!item.title || !anchor) {
     return [];
   }
 
   return [
     {
-      anchorId,
+      anchorId: anchor.anchorId,
       elementId: item.id,
+      type: anchor.anchorType,
       text: item.title,
       property: "title",
     },
@@ -127,6 +134,7 @@ const getCaptionsData = (item: Connector): AnchoredElementContent[] => {
       return {
         anchorId: item.id,
         elementId: item.id,
+        type: item.type,
         text: caption.content || "",
         property: getListProperty("captions", index, "content"),
       };
@@ -184,10 +192,15 @@ export const getContentFromTags = (
   items: BoardNode[],
   meta: AnchoredElementContent[]
 ): AnchoredElementContent[] => {
-  const tagMeta = meta.reduce<Record<string, string>>((pairs, tag) => {
+  const tagMeta = meta.reduce<
+    Record<string, { anchorId: string; anchorType: ItemType }>
+  >((pairs, tag) => {
     return {
       ...pairs,
-      [tag.elementId]: tag.anchorId,
+      [tag.elementId]: {
+        anchorId: tag.anchorId,
+        anchorType: tag.type,
+      },
     };
   }, {});
 

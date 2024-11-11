@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdown {
+  flex: 0 1 120px;
+}
+
+.icon {
+  color: var(--warning);
+  vertical-align: middle;
+  height: var(--unit);
+  width: var(--unit);
+  margin-inline-start: var(--unit-quarter);
+}

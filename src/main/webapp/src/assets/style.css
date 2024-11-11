@@ -4,7 +4,20 @@
 
 :root {
   --warning: #f4823e;
+  --highlight: #f03f1f;
   --background-primary: #eeeeee;
+  --divider-default: #e7e7e7;
+  --indigo10: #c7c7d1;
+  --blue10: #f1f3fd;
+  --text-seconday: #686685;
+  --unit-triple: 3rem;
+  --unit-double-plus: 2.25rem;
+  --unit-double: 2rem;
+  --unit-plus: 1.5rem;
+  --unit: 1rem;
+  --unit-three-quarter: 0.75rem;
+  --unit-half: 0.5rem;
+  --unit-quarter: 0.25rem;
 }
 
 /* Reset browser defaults */
@@ -26,12 +39,18 @@ html {
 body {
   height: 100%;
   line-height: 1.5;
-  padding: 0 var(--space-medium);
   max-width: 580px;
   margin: 0 auto;
 }
 
-p {
+#root {
+  height: 100%;
+}
+
+p,
+h1,
+h2,
+h3 {
   margin: 0;
 }
 
@@ -40,4 +59,24 @@ li {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+.sc-text-center {
+  text-align: center;
+}
+
+.sc-text-bold {
+  font-weight: 700;
+}
+
+.sc-flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--unit-three-quarter);
+}
+
+.sc-flex-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

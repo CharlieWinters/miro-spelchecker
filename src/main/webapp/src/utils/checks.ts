@@ -1,5 +1,5 @@
-import { SpellCheckResult } from "./api";
-import { AnchoredElementContent, WithAnchor } from "./extractors";
+import type { SpellCheckResult } from "./api";
+import type { AnchoredElementContent, WithAnchor } from "./extractors";
 
 const SEPARATORS = {
   id: ":",
@@ -42,7 +42,7 @@ export const linkChecksWithItems = (
       return acc;
     }
 
-    const { anchorId, property, elementId } = elementContent;
+    const { anchorId, property, elementId, type } = elementContent;
 
     return [
       ...acc,
@@ -53,6 +53,7 @@ export const linkChecksWithItems = (
         },
         anchorId,
         property,
+        type,
       },
     ];
   }, []);

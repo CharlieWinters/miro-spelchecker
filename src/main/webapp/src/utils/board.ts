@@ -1,9 +1,9 @@
-import {
+import type {
   BoardNode,
   CustomEvent,
   SelectionUpdateEvent,
 } from "@mirohq/websdk-types";
-import { SpellCheckResult } from "./api";
+import type { SpellCheckResult } from "./api";
 import { parseListProperty } from "./checks";
 
 const getElementValue = (
@@ -48,7 +48,7 @@ export const applySuggestion = async (
   property: string,
   check: SpellCheckResult,
   suggestion: string
-) => {
+): Promise<BoardNode | undefined> => {
   const fromPos = check.fromPos;
   const toPos = check.toPos;
   const elements = await miro.board.get({ id: check.elementId });

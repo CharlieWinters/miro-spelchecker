@@ -1,25 +1,21 @@
-import { FC } from "react";
-import cn from "classnames";
-import { Button } from "../ui/Button";
+import type { FC } from "react";
+import { Button } from "../ui/Button/Button";
 import { Icon } from "../ui/Icon/Icon";
 
-interface Props {
+type Props = {
   onClick: VoidFunction;
   loading?: boolean;
-  className?: string;
-}
-export const RefreshButton: FC<Props> = ({ loading, className, onClick }) => {
+};
+export const RefreshButton: FC<Props> = ({ loading, onClick }) => {
   return (
-    <p className={cn("centered", className)}>
-      <Button
-        onClick={onClick}
-        loading={loading}
-        type="secondary"
-        size="small"
-        label="Refresh spelling suggestions"
-      >
-        <Icon icon="refresh" />
-      </Button>
-    </p>
+    <Button
+      onClick={onClick}
+      loading={loading}
+      type="tertiary"
+      size="medium"
+      label="Refresh spelling suggestions"
+    >
+      <Icon icon="refresh" /> Refresh
+    </Button>
   );
 };

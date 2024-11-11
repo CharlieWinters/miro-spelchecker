@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.image {
+  height: 120px;
+  width: 160px;
+  object-fit: scale-down;
+}
+
+.title {
+  margin-top: var(--unit-plus);
+}
+
+.subtitle {
+  margin-top: var(--unit-half);
+}
+
+.cta {
+  margin: var(--unit);
+}

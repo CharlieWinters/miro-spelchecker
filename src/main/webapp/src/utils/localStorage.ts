@@ -1,14 +1,14 @@
-export enum LocalStorageKey {
+export const enum LocalStorageKey {
   Language = "lang",
 }
 
 const SPELL_CHECKER_APP_KEY = "spell-checker";
 
-export const getLocalStorageItem = (key: LocalStorageKey) => {
+export const getLocalStorageItem = (key: LocalStorageKey): string | null => {
   return window.localStorage.getItem(`${SPELL_CHECKER_APP_KEY}/${key}`);
 };
 
-export const setLocalStorageItem = (key: LocalStorageKey, value = "") => {
+export const setLocalStorageItem = (key: LocalStorageKey, value = ""): void => {
   if (!value) {
     window.localStorage.removeItem(`${SPELL_CHECKER_APP_KEY}/${key}`);
     return;

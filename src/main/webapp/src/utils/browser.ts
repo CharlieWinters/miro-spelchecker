@@ -14,7 +14,7 @@ export const getBrowserLanguages = (): string[] => {
   return lang ? [lang, navigator.language] : [navigator.language];
 };
 
-export const getParentHref = () => {
+export const getParentHref = (): string => {
   try {
     const url = document.referrer;
     return url || "";

@@ -1,10 +1,10 @@
-import { FC } from "react";
-import { SpellCheckResult } from "../../utils/api";
+import type { FC } from "react";
+import type { SpellCheckResult } from "../../utils/api";
 import styles from "./ContentHighlights.module.css";
 
-interface Props {
+type Props = {
   check: SpellCheckResult;
-}
+};
 export const ContentHighlights: FC<Props> = ({ check }) => {
   const text = check.plainText;
 

@@ -1,7 +1,15 @@
 .footer {
-  padding: var(--space-xxsmall) 0 var(--space-medium) 0;
+  border-top: 1px solid var(--divider-default);
+  padding: var(--unit-half) var(--unit);
+  gap: var(--unit);
+  display: flex;
+  justify-content: space-between;
 }
 
-.refresh {
-  align-self: flex-end;
+.primary {
+  flex: 1;
+}
+
+.full {
+  width: 100%;
 }

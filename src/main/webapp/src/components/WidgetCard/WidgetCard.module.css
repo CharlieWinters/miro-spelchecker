@@ -1,0 +1,39 @@
+.base {
+  display: flex;
+  gap: var(--unit);
+  padding: var(--unit) var(--unit-half) var(--unit) var(--unit);
+  border: 1px solid var(--indigo10);
+  border-radius: var(--unit-quarter);
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  gap: var(--unit);
+  align-items: center;
+  overflow: hidden;
+}
+
+.base:focus,
+.base:active,
+.base:hover {
+  background-color: var(--blue10);
+  cursor: pointer;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sub {
+  color: var(--text-seconday);
+}
+
+.highlight {
+  color: var(--red700);
+  text-decoration: underline wavy var(--red700);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

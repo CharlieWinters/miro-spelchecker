@@ -1,0 +1,28 @@
+.small {
+  object-fit: scale-down;
+  width: 36px;
+  height: 36px;
+}
+
+.medium {
+  object-fit: scale-down;
+  width: 48px;
+  height: 48px;
+}
+
+.rotate {
+  animation: rotation 1.5s infinite linear;
+}
+
+.paused {
+  animation-play-state: paused;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}

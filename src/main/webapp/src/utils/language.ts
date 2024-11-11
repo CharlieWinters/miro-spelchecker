@@ -54,7 +54,7 @@ export const getValidatedLanguage = (
   return DEFAULT_LANGUAGE;
 };
 
-export const saveLanguageSelection = (lang: SupportedLanguage) => {
+export const saveLanguageSelection = (lang: SupportedLanguage): void => {
   if (!isLocalStorageAvailable()) {
     return;
   }

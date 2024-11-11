@@ -1,20 +1,17 @@
-import { ElementContent } from "./extractors";
-import { SupportedLanguage } from "./language";
+import type { ElementContent } from "./extractors";
+import type { SupportedLanguage } from "./language";
 
 let API_TOKEN = "";
 
-const getApiToken = () => {
-  if (API_TOKEN) {
-    return Promise.resolve(API_TOKEN);
+const getApiToken = async (): Promise<string> => {
+  if (!API_TOKEN) {
+    API_TOKEN = await miro.board.getIdToken();
   }
 
-  return miro.board.getIdToken().then((token) => {
-    API_TOKEN = token;
-    return API_TOKEN;
-  });
+  return API_TOKEN;
 };
 
-export interface SpellCheckResult {
+export type SpellCheckResult = {
   elementId: string;
   fromPos: number;
   fromPosPlain: number;
@@ -24,9 +21,9 @@ export interface SpellCheckResult {
   plainText: string; // Normalized text
   message: string; // Error explanation
   suggestedReplacements: string[];
-}
+};
 
-export const runSpellCheckRequest = (
+export const runSpellCheckRequest = async (
   elements: ElementContent[],
   language: SupportedLanguage
 ): Promise<SpellCheckResult[]> => {

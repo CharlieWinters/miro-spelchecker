@@ -1,0 +1,15 @@
+.container {
+  height: 100vh;
+}
+
+.data {
+  flex: 1;
+  padding: 0 var(--unit);
+}
+
+.error {
+  padding: var(--unit);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

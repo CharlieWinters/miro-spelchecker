@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex: 0 0 var(--unit-double-plus);
+}
+
+.title {
+  flex: 1;
+}

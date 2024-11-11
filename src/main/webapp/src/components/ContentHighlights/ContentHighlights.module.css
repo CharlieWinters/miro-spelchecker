@@ -1,9 +1,8 @@
 .highlight {
-  text-decoration: underline wavy var(--red600);
-  word-break: break-all;
+  color: var(--highlight);
+  text-decoration: underline wavy var(--highlight);
 }
 
 .text {
-  color: var(--blackAlpha60);
-  word-break: break-all;
+  color: var(--indigo600);
 }
